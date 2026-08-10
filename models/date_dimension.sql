@@ -1,3 +1,4 @@
+{{ config(materialized='table') }}
 with cte as (
     select
         try_to_timestamp(STARTED_AT) as STARTED_AT,
@@ -19,7 +20,7 @@ with cte as (
         then 'SUMMER'
         ELSE 'AUTUMN'
         end as station_of_year
-        
+
     from {{ source('demo', 'bikes') }}
     where STARTED_AT != 'started_at'
 )
