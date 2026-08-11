@@ -1,16 +1,24 @@
 {{ config(materialized='table') }}
 
-with trip as (
-    select 
-    RIDE_ID,
-    RIDEABLE_TYPE,
-    DATE(TO_TIMESTAMP(STARTED_AT)) as TRIP_DATE,
-    START_STATION_ID,
-    END_STATION_ID,
-    MEMBER_OR_CASUAL_RIDE,
-    TIMESTAMPDIFF(second,to_timestamp(started_at),to_timestamp(ended_at)) as trip_duration_seconds
-    from {{ source('demo', 'bikes') }}
-    where RIDE_ID != 'ride_id'
+WITH TRIPS as (
+
+select
+RIDE_ID,
+-- RIDEABLE_TYPE,
+DATE(TO_TIMESTAMP(STARTED_AT)) AS TRIP_DATE,
+START_STATIO_ID AS START_STATION_ID,
+END_STATION_ID,
+MEMBER_CSUAL AS MEMBER_CASUAL,
+TIMESTAMPDIFF(SECOND,TO_TIMESTAMP(STARTED_AT),TO_TIMESTAMP(ENDED_AT)) AS TRIP_DURATION_SECONDS
+
+from {{ ref('stg_bike') }}
+
+where RIDE_ID != '"bikeid"' and RIDE_ID != 'bikeid'
+
+
+
 )
 
-select * from trip
+select
+*
+from TRIPS

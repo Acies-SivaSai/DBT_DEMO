@@ -16,7 +16,7 @@ with cte as (
         -- ELSE 'AUTUMN'
         -- end as station_of_year
 
-    from {{ source('demo', 'bikes') }}
+    from {{ ref('stg_bike') }}
     where STARTED_AT != 'started_at'
 )
 
